@@ -1,0 +1,19 @@
+{
+  "name": "armazon/proyecto-base",
+  "description": "Proyecto base para iniciar una aplicación con Armazón",
+  "authors": [
+    {
+      "name": "Nestor Picado",
+      "email": "info@nestorpicado.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require": {
+    "php": ">=7.0.0",
+    "armazon/armazon": "dev-master"
+  },
+  "config": {
+    "preferred-install": "dist"
+  }
+}

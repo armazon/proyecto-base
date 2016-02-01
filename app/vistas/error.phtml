@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Error <?= $this->estado_http ?></title>
+</head>
+<body>
+
+<?php
+$mensajes = [
+    400 => ['Solicitud Incorrecta - Bad Request', 'Su solicitud contiene sintaxis errónea y no debería repetirla.'],
+    401 => ['No Autorizado - Unauthorized', 'Debe autenticarse primero.'],
+    403 => ['Prohibido - Forbidden', 'Su solicitud no es permitida y no debería repetirla.'],
+    404 => ['Recurso No Encontrado - Not Found'],
+    405 => ['Método No Permitido - Method Not Allowed'],
+    406 => ['No Aceptable - Not Acceptable'],
+    500 => ['Error Interno - Internal Server Error'],
+    503 => ['Servicio No Disponible - Service Unavailable'],
+];
+?>
+    <h1><?= $this->estado_http ?></h1>
+
+    <p><?= $mensajes[$this->estado_http][0] ?></p>
+
+<?php if (isset($mensajes[$this->estado_http][1])) { ?>
+    <p><?= $mensajes[$this->estado_http][1] ?></p>
+<?php } ?>
+
+</body>
+</html>

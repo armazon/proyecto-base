@@ -1,0 +1,33 @@
+#! /usr/bin/env php
+<?php
+
+// Incluimos autocargador de Composer
+require __DIR__ . '/vendor/autoload.php';
+
+// Imprimimos titulo
+echo "\e[43;30m                                                                                        \e[0m\n";
+echo "\e[43;30m Armazón - Marco de Trabajo y Servidor de Aplicación de Alto Rendimiento y Flexibilidad \e[0m\n";
+echo "\e[43;30m                                                                                        \e[0m\n";
+echo "\n";
+
+
+if (isset($argv[1]) && $argv[1] == 'iniciar') {
+
+    // Obtenemos instancia de la aplicación
+    $app = require 'app/instancia.php';
+
+    // Instanciamos servidor Swoole
+    $servidor = new Armazon\Servidor\Swoole($app);
+
+    // Corremos el servidor
+    $servidor->correr();
+
+} else {
+
+    echo "Los comandos disponibles son:\n";
+    echo "\n";
+    echo " > iniciar\n";
+    echo " > detener\n";
+    echo "\n";
+
+}
