@@ -8,7 +8,6 @@
     }
   ],
   "minimum-stability": "dev",
-  "prefer-stable": true,
   "require": {
     "php": ">=7.0.0",
     "armazon/armazon": "dev-master"
