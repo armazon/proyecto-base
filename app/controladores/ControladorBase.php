@@ -7,7 +7,7 @@ class ControladorBase extends \Armazon\Mvc\Controlador
      */
     public function bd()
     {
-        return $this->bolsa['bd'];
+        return $this->app->obtenerComponente('bd');
     }
 
     /**
@@ -15,6 +15,6 @@ class ControladorBase extends \Armazon\Mvc\Controlador
      */
     public function traductor()
     {
-        return $this->app['traductor'];
+        return $this->app->obtenerComponente('traductor');
     }
 }

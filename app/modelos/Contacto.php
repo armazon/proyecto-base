@@ -1,6 +1,6 @@
 <?php
 
-class Contactos extends \Armazon\Mvc\RelationalModel
+class Contactos extends \Armazon\Mvc\ModeloRelacional
 {
     public $id;
     public $nombre;
@@ -17,8 +17,8 @@ class Contactos extends \Armazon\Mvc\RelationalModel
     public $fecha_cre;
     public $fecha_mod;
 
-    protected static $nombre_tabla = 'contactos';
-    protected static $llave_primaria = 'id';
+    protected static $nombreTabla = 'contactos';
+    protected static $llavePrimaria = 'id';
     protected static $campos = [
         'id'                    => ['tipo' => 'num', 'requerido' => true],
         'nombre'                => ['tipo' => 'txt', 'requerido' => true],

@@ -14,6 +14,7 @@
     "armazon/armazon": "dev-master"
   },
   "config": {
-    "preferred-install": "dist"
+    "preferred-install": "dist",
+    "platform": { "ext-swoole": "1.8.0" }
   }
 }
