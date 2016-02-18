@@ -15,12 +15,11 @@ Controlador@metodo
 
 return [
     // Rutas de ejemplo
-    ['GET', '/', 'Portada@inicio'],
-    ['GET', '/prueba', 'Usuarios@listado'],
-    ['GET', '/prueba/:id', 'Usuarios@detalle'],
-    ['POST', '/usuario/nada', 'Usuarios@nada', ['id' => 123], 400],
-    ['GET', '/usuario/nada', '=http://google.com', null, 303],
+    ['GET', '/', 'Prueba@portada'],
+    ['GET', '/prueba', 'Prueba@listado', ['formato' => 'json']],
+    ['GET', '/prueba/:id', 'Prueba@detalle'],
 
     // Rutas de errores
     [404, '#error'],
+    [500, '#error'],
 ];

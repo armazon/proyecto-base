@@ -23,7 +23,7 @@ $app->registrarComponente('vista', function () use ($app) {
 
     // Registramos traductor en la vista como procesador
     $traductor = $app->obtenerComponente('traductor');
-    $vista->registrarProcesador('_', function ($texto) use ($traductor) {
+    $vista->registrarFiltro('_', function ($texto) use ($traductor) {
         return $traductor->t($texto);
     });
 

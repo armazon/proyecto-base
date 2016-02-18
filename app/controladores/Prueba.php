@@ -2,7 +2,7 @@
 
 class PruebaControlador extends ControladorBase
 {
-    public function inicio()
+    public function portada()
     {
 //        $contacto = $this->bd()
 //            ->seleccionar('*', 'contactos')
@@ -17,9 +17,23 @@ class PruebaControlador extends ControladorBase
 //        $contactos = Contacto::buscar();
 
         $this->vista->idioma = 'es';
-        $this->vista->idioma = 'Titulo de Ejemplo';
+        $this->vista->titulo = 'Titulo de Ejemplo';
         $this->vista->definirPlantilla('ejemplo');
 
         $this->vista->renderizar('portada');
     }
-} 
+
+    public function listado()
+    {
+        if (isset($this->parametros['formato']) && $this->parametros['formato'] == 'json') {
+            $this->respuesta->definirTipoContenido('json');
+            $this->respuesta->definirContenido(json_encode(['Lista', 'de', 'ejemplo']));
+        }
+    }
+
+    public function detalle()
+    {
+        $this->vista->id = $this->parametros['id'];
+        $this->vista->renderizar('ejemplo');
+    }
+}
