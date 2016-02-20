@@ -4,34 +4,130 @@
 // Incluimos autocargador de Composer
 require __DIR__ . '/vendor/autoload.php';
 
-// Imprimimos titulo
-echo "\e[43;30;5m                                                                                         \e[0m\n";
-echo "\e[43;30;5m  Armazón - Marco de Trabajo y Servidor de Aplicación de Alto Rendimiento y Flexibilidad \e[0m\n";
-echo "\e[43;30;5m                                                                                         \e[0m\n";
-echo "\n";
+// Obtenemos instancia de la aplicación
+$app = require 'app/instancia.php';
 
+function imprimirInfo($texto)
+{
+    echo "\e[0m ... {$texto}\n";
+}
 
-if (isset($argv[1]) && $argv[1] == 'iniciar') {
+function imprimirError($texto)
+{
+    echo "\e[1;31m %$# {$texto}\e[0m\n";
+}
 
-    // Obtenemos instancia de la aplicación
-    $app = require 'app/instancia.php';
+function imprimirExito($texto)
+{
+    echo "\e[1;32m !!! {$texto}\e[0m\n";
+}
+
+function enviarSigno($app, int $signo)
+{
+    $archivoPid = '/var/run/' . $app->id . '.pid';
+    if (is_readable($archivoPid)) {
+        $pid = file_get_contents($archivoPid);
+        return posix_kill($pid, $signo);
+    } else {
+        imprimirError('El archivo pid no fue encontrado.');
+        return false;
+    }
+}
+
+function iniciar($app)
+{
+    imprimirInfo("Iniciando aplicación '" . $app->id . "'.");
 
     // Instanciamos servidor Swoole
     $servidor = new Armazon\Servidor\Swoole($app);
 
     // Configuramos servidor
-    $servidor->archivoPid = '/var/run/armazon.pid';
-    $servidor->archivoRegistros = '/var/log/armazon.log';
+    $servidor->puerto = 80;
+    $servidor->usuario = 'root';
+    $servidor->grupo = 'root';
+    $servidor->archivoPid = '/var/run/' . $app->id . '.pid';
+    $servidor->archivoRegistros = '/var/log/' . $app->id . '.log';
 
     // Corremos el servidor
-    $servidor->iniciar();
-
-} else {
-
-    echo "Comandos disponibles:\n";
-    echo "\n";
-    echo " > iniciar\n";
-    echo " > detener\n";
-    echo "\n";
-
+    imprimirExito("La aplicación ha sido iniciada.");
+    echo "\n\n";
+    if (!$servidor->iniciar()) {
+        imprimirError("La aplicación no pudo iniciarse debido a un error interno.");
+    }
 }
+
+function detener($app)
+{
+    imprimirInfo("Deteniendo aplicación '" . $app->id . "'.");
+    if (enviarSigno($app, SIGTERM)) {
+        imprimirExito("La aplicación ha sido detenida.");
+    } else {
+        imprimirError("La aplicación no pudo detenerse.");
+    }
+}
+
+function recargar($app)
+{
+    imprimirInfo("Recargando la aplicación.");
+    if (enviarSigno($app, SIGUSR1)) {
+        imprimirExito("La aplicación ha sido recargada.");
+        iniciar($app);
+    } else {
+        imprimirError("No se pudo recargar la aplicación.");
+    }
+}
+function estatus($app)
+{
+    $archivoPid = '/var/run/' . $app->id . '.pid';
+    if (is_readable($archivoPid)) {
+        $pid = file_get_contents($archivoPid);
+        if (posix_getpgid($pid)) {
+            imprimirInfo('El servidor está corriendo.');
+            return;
+        }
+    }
+
+    imprimirInfo('El servidor está detenido.');
+}
+
+function mostrarAyuda()
+{
+    echo "\e[1;32m Comandos disponibles:\e[0m\n";
+    echo "\n";
+    echo "  > iniciar    : Inicia el servidor de aplicación\n";
+    echo "  > detener    : Detiene el servidor de aplicación\n";
+    echo "  > recargar   : Recarga la aplicación para leer nuevos cambios en códigos\n";
+    echo "  > estatus    : Muestra el estatus del servidor de aplicación\n";
+}
+
+// Imprimimos titulo
+echo "\n";
+echo "\e[43;30;5m           \e[1;33;40m                                                 \e[0m\n";
+echo "\e[43;30;5m  ARMAZÓN  \e[1;33;40m  Marco de Trabajo y Servidor de Aplicación      \e[0m\n";
+echo "\e[43;30;5m    PHP    \e[1;33;40m  de Alto Rendimiento y Flexibilidad.            \e[0m\n";
+echo "\e[43;30;5m           \e[1;33;40m                                                 \e[0m\n";
+echo "\n";
+
+// Procesamos los comandos
+if (isset($argv[1])) {
+    switch ($argv[1]) {
+        case 'iniciar':
+            iniciar($app);
+            break;
+        case 'detener':
+            detener($app);
+            break;
+        case 'recargar':
+            recargar($app);
+            break;
+        case 'estatus':
+            estatus($app);
+            break;
+        default:
+            mostrarAyuda();
+    }
+} else {
+    mostrarAyuda();
+}
+
+echo "\n\n";
