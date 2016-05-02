@@ -22,7 +22,7 @@ function imprimirExito($texto)
     echo "\e[1;32m !!! {$texto}\e[0m\n";
 }
 
-function enviarSigno($app, int $signo)
+function enviarSigno($app, $signo)
 {
     $archivoPid = '/var/run/' . $app->id . '.pid';
     if (is_readable($archivoPid)) {
