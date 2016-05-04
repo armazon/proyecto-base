@@ -16,24 +16,28 @@ class PruebaControlador extends ControladorBase
 
 //        $contactos = Contacto::buscar();
 
-        $this->vista->idioma = 'es';
-        $this->vista->titulo = 'Titulo de Ejemplo';
-        $this->vista->definirPlantilla('ejemplo');
+        $vista = $this->vista();
+        $vista->idioma = 'es';
+        $vista->titulo = 'Titulo de Ejemplo';
+        $vista->definirPlantilla('ejemplo');
+        $vista->renderizar('portada');
 
-        $this->vista->renderizar('portada');
+        return $vista;
     }
 
     public function listado()
     {
-        if (isset($this->parametros['formato']) && $this->parametros['formato'] == 'json') {
+        if (isset($this->ruta->parametros['formato']) && $this->ruta->parametros['formato'] == 'json') {
             $this->respuesta->definirTipoContenido('json');
             $this->respuesta->definirContenido(json_encode(['Lista', 'de', 'ejemplo']));
         }
     }
 
-    public function detalle()
+    public function detalle($id)
     {
-        $this->vista->id = $this->parametros['id'];
-        $this->vista->renderizar('ejemplo');
+        $this->vista()->id = $id;
+        $this->vista()->renderizar('ejemplo');
+
+        return $this->vista();
     }
 }

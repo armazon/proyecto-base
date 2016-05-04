@@ -17,6 +17,17 @@ $app->registrarComponente('traductor', function() use ($app) {
 });
 
 
+// Registramos componente Sesion
+$app->registrarComponente('sesion', function() {
+    $adaptador = new \Armazon\Sesion\Adaptador\Archivos([
+        'dir' => sys_get_temp_dir()
+    ]);
+    $sesion = new Armazon\Sesion\Manejador($adaptador);
+
+    return $sesion;
+});
+
+
 // Registramos componente Vista ** REQUERIDO **
 $app->registrarComponente('vista', function () use ($app) {
     $vista = new \Armazon\Mvc\Vista($app);
@@ -33,10 +44,8 @@ $app->registrarComponente('vista', function () use ($app) {
 
 // Registramos componente para consultar base de datos relacional
 $app->registrarComponente('bd', function () use ($app) {
-    return new \Armazon\Bd\Relacional($app, [
-        'servidores' => [
-            ['mysql:host=localhost;dbname=nearbooking;charset=utf8;', 1]
-        ],
+    return new \Armazon\Bd\Relacional([
+        'dsn' => 'mysql:host=127.0.0.1;dbname=prueba;charset=utf8;',
         'usuario' => 'root',
         'contrasena' => '',
         'comando_inicial' => null,
