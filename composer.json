@@ -11,7 +11,7 @@
   "prefer-stable": true,
   "require": {
     "php": ">=5.5.0",
-    "armazon/armazon": "dev-master"
+    "armazon/armazon": "~0.2.0"
   },
   "config": {
     "preferred-install": "dist",
